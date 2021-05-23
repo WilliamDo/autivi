@@ -59,7 +59,7 @@ def play_vtv(url):
         play_button = driver.find_element(By.CSS_SELECTOR, "video.vjs-tech")
         play_button.click()
 
-        sleep(2.5)
+        sleep(0.5)
         full_screen_button = driver.find_element(By.CSS_SELECTOR, "button.vjs-fullscreen-control")
         full_screen_button.click()
 
