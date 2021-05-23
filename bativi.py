@@ -55,7 +55,6 @@ def play_vtv(url):
     driver.get(url)
 
     try:
-        sleep(5)
         play_button = driver.find_element(By.CSS_SELECTOR, "video.vjs-tech")
         play_button.click()
 
