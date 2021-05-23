@@ -44,6 +44,16 @@ def worker():
 Thread(target=worker, daemon=True).start()
 
 def play_vtv(url):
+    global driver
+    
+    try:
+        driver.quit()
+    except:
+        print("something went wrong when quitting the driver")
+
+    driver = Chrome()
+    driver.implicitly_wait(10)
+
     driver.get(url)
     
     play_button = driver.find_element(By.CSS_SELECTOR, "button.vjs-play-control")
