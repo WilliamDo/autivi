@@ -1,11 +1,11 @@
 from pynput import keyboard
 from queue import Queue, Full
 from threading import Thread
+from time import sleep
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 
 driver = Chrome()
-driver.implicitly_wait(10)
 presses = Queue(maxsize=1)
 
 vtvgo = {
@@ -52,15 +52,20 @@ def play_vtv(url):
         print("something went wrong when quitting the driver")
 
     driver = Chrome()
-    driver.implicitly_wait(10)
-
     driver.get(url)
-    
-    play_button = driver.find_element(By.CSS_SELECTOR, "button.vjs-play-control")
-    play_button.click()
 
-    full_screen_button = driver.find_element(By.CSS_SELECTOR, "button.vjs-fullscreen-control")
-    full_screen_button.click()
+    try:
+        sleep(5)
+        play_button = driver.find_element(By.CSS_SELECTOR, "video.vjs-tech")
+        play_button.click()
+
+        sleep(2.5)
+        full_screen_button = driver.find_element(By.CSS_SELECTOR, "button.vjs-fullscreen-control")
+        full_screen_button.click()
+
+    except:
+        print("the button was probably unavailable")
+
 
 def on_press(key):       
     try:
@@ -79,13 +84,5 @@ def on_release(key):
         return False
 
 # Collect events until released
-with keyboard.Listener(
-        on_press=on_press,
-        on_release=on_release) as listener:
+with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
     listener.join()
-
-# ...or, in a non-blocking fashion:
-listener = keyboard.Listener(
-    on_press=on_press,
-    on_release=on_release)
-listener.start()
