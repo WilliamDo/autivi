@@ -86,7 +86,7 @@ class PiTVSwitcher(QMainWindow):
                             left: 0 !important;
                             width: 100vw !important;
                             height: 100vh !important;
-                            object-fit: contain !important; /* Change to 'cover' if you want it to fill completely without black bars */
+                            object-fit: contain !important;
                             z-index: 999999 !important;
                         }
                     `;
@@ -101,7 +101,6 @@ class PiTVSwitcher(QMainWindow):
                 });
             }
 
-            // Run immediately and poll every 1 second to handle dynamic single-page app (SPA) re-renders
             setInterval(applyCropAndMaximize, 1000);
             window.addEventListener('DOMContentLoaded', applyCropAndMaximize);
         })();
@@ -113,16 +112,10 @@ class PiTVSwitcher(QMainWindow):
         self.profile.scripts().insert(script)
 
     def showEvent(self, event):
-        """Called automatically by Qt the moment the window is mapped to the screen.
-           This guarantees the Wayland compositor is ready to receive fullscreen commands."""
         super().showEvent(event)
-
-        # Force screen geometry match as a failsafe
         screen = QApplication.primaryScreen()
         if screen:
             self.setGeometry(screen.geometry())
-
-        # Trigger fullscreen safely now that the surface exists
         self.showFullScreen()
 
     def load_channel(self, key):
@@ -133,15 +126,15 @@ class PiTVSwitcher(QMainWindow):
     def keyPressEvent(self, event):
         key = event.key()
 
-        # Check if the pressed key corresponds to a defined channel
         if key in CHANNELS:
             self.current_channel = key
             self.load_channel(key)
+        elif key == Qt.Key.Key_0:
+            print("Simulating crash / exit via Key 0...")
+            sys.exit(0)  # Forces the process to quit so systemd can trigger a restart
         elif key == Qt.Key.Key_Escape:
-            # Press ESC to exit the application if needed during development
             self.close()
         else:
-            # Pass other keys up to the browser/system
             super().keyPressEvent(event)
 
 if __name__ == "__main__":
