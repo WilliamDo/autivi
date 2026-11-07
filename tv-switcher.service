@@ -1,0 +1,22 @@
+[Unit]
+Description=Raspberry Pi PyQt6 TV Channel Switcher
+After=graphical.target network.target
+
+[Service]
+Type=simple
+User=your_username
+Environment=DISPLAY=:0
+Environment=WAYLAND_DISPLAY=wayland-0
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+Environment=QT_QPA_PLATFORM=wayland
+
+# Path to your virtual environment python and your script
+ExecStart=/home/your_username/your_project_folder/venv/bin/python /home/your_username/your_project_folder/tv_switcher.py
+
+# Automatically restart if the script crashes or exits with a non-zero code
+Restart=always
+# Wait 5 seconds before attempting a restart to prevent rapid looping
+RestartSec=5
+
+[Install]
+WantedBy=graphical.target
