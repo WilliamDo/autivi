@@ -3,6 +3,7 @@ import sys
 
 # MUST be set before QApplication is initialized
 os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--autoplay-policy=no-user-gesture-required"
+os.environ["QT_QPA_PLATFORM"] = "wayland"
 
 from PyQt6.QtCore import QUrl, Qt
 from PyQt6.QtWidgets import QApplication, QMainWindow
