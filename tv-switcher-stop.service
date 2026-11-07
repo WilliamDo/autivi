@@ -1,0 +1,6 @@
+[Unit]
+Description=Stop TV Switcher Application
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemctl stop tv-switcher.service

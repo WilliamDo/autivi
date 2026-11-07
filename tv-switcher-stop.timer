@@ -1,0 +1,9 @@
+[Unit]
+Description=Trigger TV Switcher Stop at 10:00 PM Daily
+
+[Timer]
+OnCalendar=*-*-* 22:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
