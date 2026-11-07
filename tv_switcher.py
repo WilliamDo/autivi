@@ -26,7 +26,10 @@ class PiTVSwitcher(QMainWindow):
         
         # Window configuration for Raspberry Pi (Full screen / Kiosk mode)
         self.setWindowTitle("Pi TV Channel Switcher")
-        self.showFullScreen()
+
+        # 1. Basic flags (avoid FramelessWindowHint if Wayland fights it,
+        # or apply geometry explicitly instead)
+        self.setWindowFlags(Qt.WindowType.Window)
 
         # 1. Setup a persistent profile so cookies and login sessions are saved to disk
         storage_path = os.path.join(os.getcwd(), "pi_tv_profile")
@@ -45,6 +48,19 @@ class PiTVSwitcher(QMainWindow):
         self.current_channel = Qt.Key.Key_1
         if self.current_channel in CHANNELS:
             self.load_channel(self.current_channel)
+
+    def showEvent(self, event):
+        """Called automatically by Qt the moment the window is mapped to the screen.
+           This guarantees the Wayland compositor is ready to receive fullscreen commands."""
+        super().showEvent(event)
+
+        # Force screen geometry match as a failsafe
+        screen = QApplication.primaryScreen()
+        if screen:
+            self.setGeometry(screen.geometry())
+
+        # Trigger fullscreen safely now that the surface exists
+        self.showFullScreen()
 
     def load_channel(self, key):
         url = CHANNELS[key]
