@@ -24,12 +24,17 @@ class PiTVSwitcher(QMainWindow):
         self.setWindowTitle("Pi TV Channel Switcher")
         self.setWindowFlags(Qt.WindowType.Window)
 
-        # 1. Setup a persistent profile so cookies and login sessions are saved to disk
-        storage_path = os.path.join(os.getcwd(), "pi_tv_profile")
+        # 1. Setup a robust, absolute path for persistent storage in the user's home directory
+        storage_path = os.path.expanduser("~/.local/share/pi_tv_profile")
+        os.makedirs(storage_path, exist_ok=True) # Ensure directory exists
+
         self.profile = QWebEngineProfile("PiTVPersistentProfile", self)
         self.profile.setPersistentStoragePath(storage_path)
         self.profile.setCachePath(os.path.join(storage_path, "cache"))
         self.profile.setPersistentCookiesPolicy(QWebEngineProfile.PersistentCookiesPolicy.ForcePersistentCookies)
+
+        # Explicitly enforce disk caching so cookies and web session data are written to storage
+        self.profile.setHttpCacheType(QWebEngineProfile.HttpCacheType.DiskHttpCache)
 
         # 2. Inject the CSS crop & autoplay automation script into the profile
         self._inject_automation_script()
