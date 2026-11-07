@@ -14,8 +14,7 @@ from PyQt6.QtWebEngineCore import QWebEngineScript, QWebEngineProfile, QWebEngin
 # Define your TV channels mapping number keys to web URLs / video links
 # You can replace these URLs with your actual channel links (e.g., YouTube embeds, HTML5 streams)
 CHANNELS = {
-    Qt.Key.Key_0: "https://vtvgo.vn/channel/1",
-    Qt.Key.Key_1: "https://www.youtube.com/embed/live_stream?channel=YOUR_CHANNEL_ID_1",
+    Qt.Key.Key_1: "https://vtvgo.vn/channel/1",
     Qt.Key.Key_2: "https://vtvgo.vn/channel/2",
     Qt.Key.Key_3: "https://vtvgo.vn/channel/3",
 }
